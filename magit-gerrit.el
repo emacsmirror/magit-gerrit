@@ -122,6 +122,11 @@ Typical values would be \"publish\" or \"for\".")
     gcmd))
 
 (defun magit-gerrit--query (prj &optional status)
+  "Build a gerrit query command to find changes in project PRJ with STATUS.
+If STATUS is nil, find open changes.  The query will request data in
+JSON format and include only the current patch set.
+The returned command include the ssh options, but not the actual ssh
+command and gerrit hostname."
   (magit-gerrit--command "query"
                          "--format=JSON"
                          "--current-patch-set"
@@ -161,6 +166,10 @@ All query commands use the `--format=JSON', `--all-approvals',
              collect item)))
 
 (defun magit-gerrit--review-abandon (prj rev)
+  "Send a gerrit command to abandon the change in project PRJ identifed by REV.
+Uses an ssh connection to the gerrit server to issue a `review'
+commmand.  REV may be a commit SHA1, a gerrit changeno,patch-set pair or
+a gerrit ChangeId,patch-set pair."
   (magit-gerrit--ssh-cmd "review" "--project" prj "--abandon" rev))
 
 (defun magit-gerrit--review-submit (prj rev &optional msg)
@@ -359,7 +368,8 @@ If PROCESS is nil, wait for `magit-this-process'."
         (browse-url (cdr (assoc 'url jobj))))))
 
 (defun magit-gerrit-copy-review (with-commit-message)
-  "Copy review url and commit message."
+  "Copy review url and optionally the commit message.
+Include the commit message when WITH-COMMIT-MESSAGE is non-nil."
   (let ((jobj (magit-gerrit-review-at-point)))
     (if jobj
         (with-temp-buffer
