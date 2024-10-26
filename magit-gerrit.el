@@ -204,7 +204,7 @@ a gerrit ChangeId,patch-set pair."
     str))
 
 (defun magit-gerrit-create-branch-force (branch parent)
-  "Switch 'HEAD' to new BRANCH at revision PARENT and update working tree.
+  "Switch `HEAD' to new BRANCH at revision PARENT and update working tree.
 Fails if working tree or staging area contain uncommitted changes.
 Succeed even if branch already exist
 \('git checkout -B BRANCH REVISION')."
